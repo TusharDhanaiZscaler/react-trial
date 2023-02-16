@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import {StudentList, Input } from "./components-classic";
 
 let studentData = [
     {
@@ -17,44 +18,6 @@ let studentData = [
         "phone": 1224854734
     }
 ];
-
-const Student = ({id,name,phone,onDelete}) => {
-    return (
-        <tr>
-            <td>{id}</td>
-            <td>{name}</td>
-            <td>{phone}</td>
-            <td>
-                <button id={id} onClick={onDelete}>Delete</button>
-            </td>
-        </tr>
-    )
-}
-
-const StudentList = ({studentList, onDelete}) => {
-    return (
-        studentList.map(item => {
-            return (
-                <Student
-                    key={item.id}
-                    id={item.id}
-                    name={item.name}
-                    phone={item.phone}
-                    onDelete={onDelete}
-                />
-            )
-        })
-    )
-}
-
-const Input = ({name,type,onInput}) => {
-    return (
-        <div>
-            <label>{name}</label>&nbsp;
-            <input type={type} onInput={onInput} />
-        </div>
-    )
-}
 
 const App = () => {
     const [studentList, setStudentList] = useState(studentData)
@@ -88,13 +51,15 @@ const App = () => {
     const updateStudent = id => {
         const list = studentList
         const position = list.findIndex(item => item.id === id)
-        list[position].phone = newNumber
+        list[position].phone = Number(newNumber)
         setStudentList(list)
+        console.log(studentList);
     }
 
     const deleteStudent = (event) => {
         event.preventDefault()
-        setStudentList(studentList.filter(item => item.id != event.target.id))
+        const newList = studentList.filter(item => item.id != event.target.id)
+        setStudentList(newList)
     }
 
     return (

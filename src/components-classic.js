@@ -51,11 +51,29 @@ class StudentList extends React.Component {
     }
 }
 
+class Form extends React.Component {
+    render() {
+        return (
+            <form>
+                <Input name="Name" type="text" onInput={this.props.onNameInput} />
+                <Input name="Phone Number" type="text" onInput={this.props.onNumberInput} />
+                <button onClick={this.props.onClickButton}>Add</button>
+            </form>
+        )
+    }
+}
+
 class Input extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             name: props.name
+        }
+    }
+
+    static getDerivedStateFromProps(nextProps) {
+        return {
+            name: nextProps.name
         }
     }
 
@@ -69,4 +87,18 @@ class Input extends React.Component {
     }
 }
 
-export {Student, StudentList, Input}
+class TableHeader extends React.Component {
+    render() {
+        return(
+            <thead>
+                <tr>
+                    {this.props.headers.map(
+                        item => <th>{item}</th>
+                    )}
+                </tr>
+            </thead>
+        )
+    }
+}
+
+export {Student, StudentList, Form, Input, TableHeader}

@@ -1,6 +1,6 @@
 import React from "react";
 import {StudentList, Form, TableHeader } from "./components-classic";
-import { ThemeContext } from "./theme-context";
+import { ThemeContext, themes } from "./theme-context";
 
 let studentData = [
     {
@@ -34,6 +34,15 @@ class App extends React.Component {
             studentList: studentData,
             newName: '',
             newNumber: '',
+            colorScheme: themes.dark,
+            toggleTheme: () => {
+                this.setState({
+                    ...this.state,
+                    colorScheme: this.state.colorScheme === themes.dark
+                                    ? themes.light
+                                    : themes.dark
+                })
+            }
         }
     }
 
@@ -81,7 +90,7 @@ class App extends React.Component {
     }
 
     render() {
-        const ThemeConsumer = ThemeContext.Consumer;
+        const theme = this.state.colorScheme
         return (
             <div>
                 <h1>Student List</h1>
@@ -92,22 +101,25 @@ class App extends React.Component {
                 />
                 <table>
                     <TableHeader headers={tableHeaders} />
-                    <ThemeConsumer>
-                        { value => (
                             <tbody
                                 style={{
-                                    backgroundColor: value.background,
-                                    color: value.foreground
+                                    backgroundColor: theme.background,
+                                    color: theme.foreground
                                 }}
                             >
                                <StudentList
                                 studentList={this.state.studentList} 
                                 onDelete={this.deleteStudent} />
                             </tbody>
-                            )
-                        }
-                    </ThemeConsumer>
                 </table>
+                <button onClick={this.state.toggleTheme}>
+                    Toggle
+                    {" "}
+                    {
+                        theme.background === '#000000'
+                        ? 'Light' : 'Dark'
+                    }
+                </button>
             </div>
         )
     }

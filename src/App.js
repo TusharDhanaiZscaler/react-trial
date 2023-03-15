@@ -90,39 +90,53 @@ class App extends React.Component {
     }
 
     render() {
-        const theme = this.state.colorScheme
+        const ThemeProvider = ThemeContext.Provider
+        const ThemeConsumer = ThemeContext.Consumer
         return (
-            <div>
-                <h1>Student List</h1>
-                <Form 
-                    onNameInput={this.onNameInput} 
-                    onNumberInput={this.onNumberInput}
-                    onClickButton={this.addStudent}
-                />
-                <table>
-                    <TableHeader headers={tableHeaders} />
-                            <tbody
-                                style={{
-                                    backgroundColor: theme.background,
-                                    color: theme.foreground
-                                }}
-                            >
-                               <StudentList
-                                studentList={this.state.studentList} 
-                                onDelete={this.deleteStudent} />
-                            </tbody>
-                </table>
-                <button onClick={this.state.toggleTheme}>
-                    Toggle
-                    {" "}
-                    {
-                        theme.background === '#000000'
-                        ? 'Light' : 'Dark'
-                    }
-                </button>
-            </div>
+            <ThemeProvider value={this.state.colorScheme}>
+                <div>
+                    <h1>Student List</h1>
+                    <Form 
+                        onNameInput={this.onNameInput} 
+                        onNumberInput={this.onNumberInput}
+                        onClickButton={this.addStudent}
+                    />
+                    <table>
+                        <TableHeader headers={tableHeaders} />
+                            <ThemeConsumer>
+                                { 
+                                    value => 
+                                    <tbody
+                                        style={{
+                                            backgroundColor: value.background,
+                                            color: value.foreground
+                                        }}
+                                    >
+                                    <StudentList
+                                        studentList={this.state.studentList} 
+                                        onDelete={this.deleteStudent} />
+                                    </tbody>
+                                }
+                            </ThemeConsumer>
+                    </table>
+                    <ThemeConsumer>
+                        {
+                            value => (<button onClick={this.state.toggleTheme}>
+                                        Toggle
+                                        {" "}
+                                        {
+                                            value.background === '#000000'
+                                            ? 'Light' : 'Dark'
+                                        }
+                                    </button>)
+                        }
+                    </ThemeConsumer>
+                </div>
+            </ThemeProvider>
         )
     }
 }
+
+App.contextType = ThemeContext
 
 export default App

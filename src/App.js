@@ -1,5 +1,6 @@
 import React from "react";
 import {StudentList, Form, TableHeader } from "./components-classic";
+import { ThemeContext } from "./theme-context";
 
 let studentData = [
     {
@@ -80,6 +81,7 @@ class App extends React.Component {
     }
 
     render() {
+        const ThemeConsumer = ThemeContext.Consumer;
         return (
             <div>
                 <h1>Student List</h1>
@@ -90,9 +92,21 @@ class App extends React.Component {
                 />
                 <table>
                     <TableHeader headers={tableHeaders} />
-                    <tbody>
-                        <StudentList studentList={this.state.studentList} onDelete={this.deleteStudent} />
-                    </tbody>
+                    <ThemeConsumer>
+                        { value => (
+                            <tbody
+                                style={{
+                                    backgroundColor: value.background,
+                                    color: value.foreground
+                                }}
+                            >
+                               <StudentList
+                                studentList={this.state.studentList} 
+                                onDelete={this.deleteStudent} />
+                            </tbody>
+                            )
+                        }
+                    </ThemeConsumer>
                 </table>
             </div>
         )
